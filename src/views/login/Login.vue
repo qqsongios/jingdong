@@ -36,7 +36,7 @@ const useHandleLogin = (showToast) => {
   })
   const handleClick = async () => {
     try {
-      const result = await post('111/api/user/login', {
+      const result = await post('/api/user/login', {
         username: data.username,
         password: data.password
       })
