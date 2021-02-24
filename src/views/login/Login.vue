@@ -27,32 +27,39 @@ import { reactive } from 'vue'
 import { post } from '../../utils/request'
 import Toast, { usrToastEffect } from '../../components/Toast'
 
+ // 用户登陆方法
+const useHandleLogin = (showToast) => {
+  const router = useRouter()
+  const data = reactive({
+    username: '',
+    password: ''
+  })
+  const handleClick = async () => {
+    try {
+      const result = await post('111/api/user/login', {
+        username: data.username,
+        password: data.password
+      })
+      if (result?.errno === 0) {
+        localStorage.isLogin = true
+        router.push({ name: 'Home' })
+      } else {
+        showToast('登陆失败')
+      }
+    } catch (e) {
+      showToast('请求失败')
+    }
+  }
+  return { data, handleClick }
+}
+
 export default {
   name: 'Login',
   components: { Toast },
   setup() {
     const router = useRouter()
-    const data = reactive({
-      username: '',
-      password: ''
-    })
     const { toastData, showToast } = usrToastEffect()
-    const handleClick = async () => {
-      try {
-        const result = await post('111/api/user/login', {
-          username: data.username,
-          password: data.password
-        })
-        if (result?.errno === 0) {
-          localStorage.isLogin = true
-          router.push({ name: 'Home' })
-        } else {
-          showToast('登陆失败')
-        }
-      } catch (e) {
-        showToast('请求失败')
-      }
-    }
+    const { data, handleClick } = useHandleLogin(showToast)
     const goRegister = () => {
       router.push({ name: 'Register' })
     }
