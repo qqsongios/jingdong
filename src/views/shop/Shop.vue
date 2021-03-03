@@ -7,8 +7,10 @@
         <input class="search_content_input" placeholder="请输入商品名称搜索" />
       </div>
     </div>
-    <ShopInfo :item="item" :borderHidden="true" />
+    <ShopInfo :item="item" :borderHidden="true" v-show="item.imgUrl" />
   </div>
+  <Content />
+  <Cart />
 </template>
 
 <script>
@@ -16,6 +18,8 @@ import { reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { get } from '../../utils/request'
 import ShopInfo from '../../components/ShopInfo'
+import Content from './Content'
+import Cart from './Cart'
 // 获取店铺信息
 const useGetShopItemEffect = () => {
   const data = reactive({ item: {} })
@@ -40,7 +44,7 @@ const useGoBack = () => {
 
 export default {
   name: 'Shop',
-  components: { ShopInfo },
+  components: { ShopInfo, Content, Cart },
   setup() {
     const { item, getShopItem } = useGetShopItemEffect()
     getShopItem()
